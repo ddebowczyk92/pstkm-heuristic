@@ -32,7 +32,7 @@ public class Path implements BaseElementWithWeight {
 
     @Override
     public double getWeight() {
-        return 0;
+        return this.weight;
     }
 
     @Override
