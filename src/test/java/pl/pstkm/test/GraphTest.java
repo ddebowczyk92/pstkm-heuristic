@@ -2,7 +2,7 @@ package pl.pstkm.test;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import pl.pstkm.graph.PSTKMGraph;
+import pl.pstkm.graph.Graph;
 import pl.pstkm.graph.Path;
 import pl.pstkm.graph.algorithm.YenTopKShortestPaths;
 
@@ -18,7 +18,7 @@ public class GraphTest {
 
     @Test
     public void simpleTest() {
-        PSTKMGraph graph = new PSTKMGraph("data/graph_1");
+        Graph graph = new Graph("data/graph_1");
         YenTopKShortestPaths yen = new YenTopKShortestPaths(graph);
         List<Path> list = yen.getShortestPaths(graph.getVertex("W1"), graph.getVertex("W4"), 7);
         for (Path path : list) {

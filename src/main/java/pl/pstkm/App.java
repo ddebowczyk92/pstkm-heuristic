@@ -1,6 +1,6 @@
 package pl.pstkm;
 
-import pl.pstkm.graph.PSTKMGraph;
+import pl.pstkm.graph.Graph;
 import pl.pstkm.graph.algorithm.YenTopKShortestPaths;
 
 /**
@@ -11,7 +11,7 @@ public class App
 {
     public static void main( String[] args )
     {
-        PSTKMGraph graph = new PSTKMGraph("data/graph_1");
+        Graph graph = new Graph("data/graph_1");
         YenTopKShortestPaths yen = new YenTopKShortestPaths(graph);
 
     }

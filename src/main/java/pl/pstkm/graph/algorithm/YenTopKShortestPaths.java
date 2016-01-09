@@ -1,7 +1,7 @@
 package pl.pstkm.graph.algorithm;
 
-import pl.pstkm.graph.PSTKMGraph;
-import pl.pstkm.graph.PSTKMVariableGraph;
+import pl.pstkm.graph.Graph;
+import pl.pstkm.graph.VariableGraph;
 import pl.pstkm.graph.Path;
 import pl.pstkm.graph.abstraction.BaseGraph;
 import pl.pstkm.graph.abstraction.BaseVertex;
@@ -18,7 +18,7 @@ import java.util.Vector;
  */
 public class YenTopKShortestPaths {
 
-    private PSTKMVariableGraph graph = null;
+    private VariableGraph graph = null;
 
     private List<Path> resultList = new Vector<Path>();
     private Map<Path, BaseVertex> pathDerivationVertexIndex = new HashMap<Path, BaseVertex>();
@@ -37,7 +37,7 @@ public class YenTopKShortestPaths {
         if (graph == null) {
             throw new IllegalArgumentException("A NULL graph object occurs!");
         }
-        this.graph = new PSTKMVariableGraph((PSTKMGraph) graph);
+        this.graph = new VariableGraph((Graph) graph);
         this.sourceVertex = sourceVertex;
         this.targetVertex = targetVertex;
         init();

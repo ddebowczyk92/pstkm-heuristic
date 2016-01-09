@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * Created by DominikD on 2015-12-12.
  */
-public class PSTKMGraph implements BaseGraph {
+public class Graph implements BaseGraph {
 
     public static final double DISCONNECTED = Double.MAX_VALUE;
 
@@ -31,11 +31,11 @@ public class PSTKMGraph implements BaseGraph {
 
     protected int edgeNum = 0;
 
-    public PSTKMGraph(final String dataFileName) {
+    public Graph(final String dataFileName) {
         importFromFile(dataFileName);
     }
 
-    public PSTKMGraph(final PSTKMGraph graph) {
+    public Graph(final Graph graph) {
         vertexNum = graph.vertexNum;
         edgeNum = graph.edgeNum;
         vertexList.addAll(graph.vertexList);
@@ -45,7 +45,7 @@ public class PSTKMGraph implements BaseGraph {
         vertexPairWeightIndex.putAll(graph.vertexPairWeightIndex);
     }
 
-    public PSTKMGraph() {
+    public Graph() {
     }
 
     public void clear() {
@@ -109,7 +109,7 @@ public class PSTKMGraph implements BaseGraph {
                     String[] vertexArr = line.trim().split("\\s");
 
                     for (int i = 0; i < vertexArr.length; i++) {
-                        BaseVertex vertex = new PSTKMVertex(vertexArr[i]);
+                        BaseVertex vertex = new Vertex(vertexArr[i]);
                         vertexList.add(vertex);
                         idVertexIndex.put(vertex.getId(), vertex);
                         vertexNum += 1;

@@ -8,18 +8,18 @@ import java.util.*;
 /**
  * Created by DominikD on 2015-12-13.
  */
-public class PSTKMVariableGraph extends PSTKMGraph {
+public class VariableGraph extends Graph {
     private Set<String> remVertexIdSet = new HashSet<>();
     private Set<Pair<String, String>> remEdgeSet = new HashSet<>();
 
-    public PSTKMVariableGraph() {
+    public VariableGraph() {
     }
 
-    public PSTKMVariableGraph(String dataFileName) {
+    public VariableGraph(String dataFileName) {
         super(dataFileName);
     }
 
-    public PSTKMVariableGraph(PSTKMGraph graph) {
+    public VariableGraph(Graph graph) {
         super(graph);
     }
 
@@ -61,7 +61,7 @@ public class PSTKMVariableGraph extends PSTKMGraph {
 
         if (remVertexIdSet.contains(sourceId) || remVertexIdSet.contains(sinkId) ||
                     remEdgeSet.contains(new Pair<String, String>(sourceId, sinkId))) {
-            return PSTKMGraph.DISCONNECTED;
+            return Graph.DISCONNECTED;
         }
         return super.getEdgeWeight(source, sink);
     }

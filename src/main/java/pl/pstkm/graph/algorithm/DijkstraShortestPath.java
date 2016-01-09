@@ -1,6 +1,6 @@
 package pl.pstkm.graph.algorithm;
 
-import pl.pstkm.graph.PSTKMGraph;
+import pl.pstkm.graph.Graph;
 import pl.pstkm.graph.Path;
 import pl.pstkm.graph.abstraction.BaseGraph;
 import pl.pstkm.graph.abstraction.BaseVertex;
@@ -83,7 +83,7 @@ public class DijkstraShortestPath {
             }
 
             // 2.2 calculate the new distance
-            double distance = startVertexDistanceIndex.containsKey(vertex) ? startVertexDistanceIndex.get(vertex) : PSTKMGraph.DISCONNECTED;
+            double distance = startVertexDistanceIndex.containsKey(vertex) ? startVertexDistanceIndex.get(vertex) : Graph.DISCONNECTED;
 
             distance += isSource2sink ? graph.getEdgeWeight(vertex, curAdjacentVertex) : graph.getEdgeWeight(curAdjacentVertex, vertex);
 
@@ -103,8 +103,8 @@ public class DijkstraShortestPath {
         determineShortestPaths(sourceVertex, sinkVertex, true);
         //
         List<BaseVertex> vertexList = new Vector<BaseVertex>();
-        double weight = startVertexDistanceIndex.containsKey(sinkVertex) ? startVertexDistanceIndex.get(sinkVertex) : PSTKMGraph.DISCONNECTED;
-        if (weight != PSTKMGraph.DISCONNECTED) {
+        double weight = startVertexDistanceIndex.containsKey(sinkVertex) ? startVertexDistanceIndex.get(sinkVertex) : Graph.DISCONNECTED;
+        if (weight != Graph.DISCONNECTED) {
             BaseVertex curVertex = sinkVertex;
             do {
                 vertexList.add(curVertex);
@@ -117,20 +117,20 @@ public class DijkstraShortestPath {
     }
 
     public Path updateCostForward(BaseVertex vertex) {
-        double cost = PSTKMGraph.DISCONNECTED;
+        double cost = Graph.DISCONNECTED;
 
         // 1. get the set of successors of the input vertex
         Set<BaseVertex> adjVertexSet = graph.getAdjacentVertices(vertex);
 
         // 2. make sure the input vertex exists in the index
         if (!startVertexDistanceIndex.containsKey(vertex)) {
-            startVertexDistanceIndex.put(vertex, PSTKMGraph.DISCONNECTED);
+            startVertexDistanceIndex.put(vertex, Graph.DISCONNECTED);
         }
 
         // 3. update the distance from the root to the input vertex if necessary
         for (BaseVertex curVertex : adjVertexSet) {
             // 3.1 get the distance from the root to one successor of the input vertex
-            double distance = startVertexDistanceIndex.containsKey(curVertex) ? startVertexDistanceIndex.get(curVertex) : PSTKMGraph.DISCONNECTED;
+            double distance = startVertexDistanceIndex.containsKey(curVertex) ? startVertexDistanceIndex.get(curVertex) : Graph.DISCONNECTED;
 
             // 3.2 calculate the distance from the root to the input vertex
             distance += graph.getEdgeWeight(vertex, curVertex);
@@ -147,7 +147,7 @@ public class DijkstraShortestPath {
 
         // 4. create the subPath if exists
         Path subPath = null;
-        if (cost < PSTKMGraph.DISCONNECTED) {
+        if (cost < Graph.DISCONNECTED) {
             subPath = new Path();
             subPath.setWeight(cost);
             List<BaseVertex> vertexList = subPath.getVertexList();
@@ -175,7 +175,7 @@ public class DijkstraShortestPath {
 
             Set<BaseVertex> preVertexSet = graph.getPrecedentVertices(curVertex);
             for (BaseVertex preVertex : preVertexSet) {
-                double costOfPreVertex = startVertexDistanceIndex.containsKey(preVertex) ? startVertexDistanceIndex.get(preVertex) : PSTKMGraph.DISCONNECTED;
+                double costOfPreVertex = startVertexDistanceIndex.containsKey(preVertex) ? startVertexDistanceIndex.get(preVertex) : Graph.DISCONNECTED;
 
                 double freshCost = costOfCurVertex + graph.getEdgeWeight(preVertex, curVertex);
                 if (costOfPreVertex > freshCost) {

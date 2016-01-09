@@ -6,12 +6,12 @@ import pl.pstkm.graph.abstraction.BaseVertex;
 /**
  * Created by DominikD on 2015-12-12.
  */
-public class PSTKMVertex implements BaseVertex, Comparable<PSTKMVertex> {
+public class Vertex implements BaseVertex, Comparable<Vertex> {
 
     private String id;
     private double weight;
 
-    public PSTKMVertex(String id){
+    public Vertex(String id){
         this.id = id;
     }
 
@@ -36,7 +36,7 @@ public class PSTKMVertex implements BaseVertex, Comparable<PSTKMVertex> {
     }
 
     @Override
-    public int compareTo(PSTKMVertex o) {
+    public int compareTo(Vertex o) {
         double diff = this.weight - o.weight;
         if (diff > 0) {
             return 1;
@@ -62,7 +62,7 @@ public class PSTKMVertex implements BaseVertex, Comparable<PSTKMVertex> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        PSTKMVertex that = (PSTKMVertex) o;
+        Vertex that = (Vertex) o;
 
         return id.equals(that.id);
 
