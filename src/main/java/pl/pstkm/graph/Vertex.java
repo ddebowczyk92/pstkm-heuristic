@@ -2,11 +2,13 @@ package pl.pstkm.graph;
 
 
 import pl.pstkm.graph.abstraction.BaseVertex;
+import pl.pstkm.linkpath.Configuration;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * Created by DominikD on 2015-12-12.
  */
-public class Vertex implements BaseVertex, Comparable<Vertex> {
+public class Vertex implements BaseVertex, Comparable<Vertex>, Configurable {
 
     private String id;
     private double weight;
@@ -71,5 +73,10 @@ public class Vertex implements BaseVertex, Comparable<Vertex> {
     @Override
     public int hashCode() {
         return id.hashCode();
+    }
+
+    @Override
+    public void addConfiguration(Configuration conf) {
+        throw new NotImplementedException();
     }
 }

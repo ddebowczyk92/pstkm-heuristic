@@ -24,6 +24,7 @@ public class WirelessNode extends Vertex {
         this.configurations = configurations;
     }
 
+    @Override
     public void addConfiguration(Configuration conf) {
         if (configurations == null) configurations = new HashSet<>();
         configurations.add(conf);

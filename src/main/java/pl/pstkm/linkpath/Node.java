@@ -34,6 +34,7 @@ public class Node extends Vertex {
         this.possibleConfigurations = possibleConfigurations;
     }
 
+    @Override
     public void addConfiguration(Configuration conf) {
         if(possibleConfigurations == null)
             possibleConfigurations = new HashSet<>();

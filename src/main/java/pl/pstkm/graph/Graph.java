@@ -4,6 +4,7 @@ package pl.pstkm.graph;
 import pl.pstkm.graph.abstraction.BaseGraph;
 import pl.pstkm.graph.abstraction.BaseVertex;
 import pl.pstkm.graph.utils.Pair;
+import pl.pstkm.linkpath.Configuration;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -27,7 +28,13 @@ public class Graph implements BaseGraph {
 
     protected List<BaseVertex> vertexList = new Vector<BaseVertex>();
 
+    protected HashMap<String, Configuration> idConfigurationIndex = new HashMap<String, Configuration>();
+
+    protected Vector<Configuration> configurationList = new Vector<Configuration>();
+
     protected int vertexNum = 0;
+
+    protected int configurationNum = 0;
 
     protected int edgeNum = 0;
 
@@ -137,10 +144,10 @@ public class Graph implements BaseGraph {
     protected void addEdge(String startVertexId, String endVertexId, double weight) {
         // actually, we should make sure all vertices ids must be correct.
         if (!idVertexIndex.containsKey(startVertexId) ||
-                    !idVertexIndex.containsKey(endVertexId) ||
-                    startVertexId.equals(endVertexId)) {
+                !idVertexIndex.containsKey(endVertexId) ||
+                startVertexId.equals(endVertexId)) {
             throw new IllegalArgumentException("The edge from " + startVertexId +
-                                                       " to " + endVertexId + " does not exist in the graph.");
+                    " to " + endVertexId + " does not exist in the graph.");
         }
 
         // update the adjacent-list of the graph
