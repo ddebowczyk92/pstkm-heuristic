@@ -4,7 +4,6 @@ package pl.pstkm.graph;
 import pl.pstkm.graph.abstraction.BaseGraph;
 import pl.pstkm.graph.abstraction.BaseVertex;
 import pl.pstkm.graph.utils.Pair;
-import pl.pstkm.linkpath.Configuration;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -28,13 +27,7 @@ public class Graph implements BaseGraph {
 
     protected List<BaseVertex> vertexList = new Vector<BaseVertex>();
 
-    protected HashMap<String, Configuration> idConfigurationIndex = new HashMap<String, Configuration>();
-
-    protected Vector<Configuration> configurationList = new Vector<Configuration>();
-
     protected int vertexNum = 0;
-
-    protected int configurationNum = 0;
 
     protected int edgeNum = 0;
 
