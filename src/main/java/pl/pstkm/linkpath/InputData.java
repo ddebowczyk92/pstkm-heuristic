@@ -1,35 +1,27 @@
-package pl.pstkm.linkpath.util;
+package pl.pstkm.linkpath;
 
 import pl.pstkm.graph.Graph;
 import pl.pstkm.graph.Vertex;
-import pl.pstkm.graph.abstraction.BaseGraph;
-import pl.pstkm.graph.abstraction.BaseVertex;
-import pl.pstkm.graph.utils.Pair;
-import pl.pstkm.linkpath.*;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Piotrek on 2016-01-09.
  */
-public class Problem {
+public class InputData {
 
     private Graph graph;
     private HashMap<String, Demand> demands;
-    private HashMap<String, Configuration> possibleConfigurations;
-    private Set<Set<Configuration>> conf;
+    private HashMap<String, Configuration> configurations;
 
-    public Problem() {
+    public InputData() {
     }
 
-    public Problem(String file) {
+    public InputData(String file) {
         importFromFile(file);
     }
 
@@ -70,12 +62,12 @@ public class Problem {
                 } else if (j == 1) {
                     isSecondLine = false;
                     String[] configurationArr = line2.trim().split("\\s");
-                    possibleConfigurations = new HashMap<String, Configuration>();
+                    configurations = new HashMap<String, Configuration>();
 
                     for (int i = 0; i < configurationArr.length; i++) {
                         Configuration configuration = null;
                         configuration = new Configuration(configurationArr[i]);
-                        possibleConfigurations.put(configurationArr[i], configuration);
+                        configurations.put(configurationArr[i], configuration);
                     }
                 } else if (j == 2) {
                     String[] strList1 = line2.trim().split("\\s");
@@ -93,7 +85,7 @@ public class Problem {
                     String[] strList2 = line2.trim().split("\\s");
                     String configurationId = strList2[0];
                     String apNodeId = strList2[1];
-                    Configuration configuration = possibleConfigurations.get(configurationId);
+                    Configuration configuration = configurations.get(configurationId);
                     Vertex node = (Vertex) graph.getVertex(apNodeId);
                     node.addConfiguration(configuration);
 
@@ -103,7 +95,7 @@ public class Problem {
                     String[] strList3 = line2.trim().split("\\s");
                     String configurationId = strList3[0];
                     String wNodeId = strList3[1];
-                    Configuration configuration = possibleConfigurations.get(configurationId);
+                    Configuration configuration = configurations.get(configurationId);
                     Vertex node = (Vertex) graph.getVertex(wNodeId);
                     node.addConfiguration(configuration);
 
@@ -119,5 +111,27 @@ public class Problem {
         }
     }
 
+    public Graph getGraph() {
+        return graph;
+    }
 
+    public void setGraph(Graph graph) {
+        this.graph = graph;
+    }
+
+    public HashMap<String, Demand> getDemands() {
+        return demands;
+    }
+
+    public void setDemands(HashMap<String, Demand> demands) {
+        this.demands = demands;
+    }
+
+    public HashMap<String, Configuration> getConfigurations() {
+        return configurations;
+    }
+
+    public void setConfigurations(HashMap<String, Configuration> configurations) {
+        this.configurations = configurations;
+    }
 }
