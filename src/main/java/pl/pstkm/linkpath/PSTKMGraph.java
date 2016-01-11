@@ -15,6 +15,10 @@ import java.util.Set;
  */
 public class PSTKMGraph extends Graph {
 
+    private int numberOfWirelessNodes;
+
+    private int numberOfAPs;
+
     public PSTKMGraph() {
         super();
     }
@@ -42,6 +46,8 @@ public class PSTKMGraph extends Graph {
             BufferedReader bufRead = new BufferedReader(input);
 
             boolean isFirstLine = true;
+            numberOfWirelessNodes=0;
+            numberOfAPs=0;
             String line;    // String that holds current file line
 
             // 2. Read first line
@@ -60,12 +66,10 @@ public class PSTKMGraph extends Graph {
                     String[] vertexArr = line.trim().split("\\s");
 
                     for (int i = 0; i < vertexArr.length; i++) {
-                        int numberOfWirelessNode=0;
-                        int numberOfAPs=0;
                         BaseVertex vertex = null;
                         if (vertexArr[i].charAt(0) == 'W') {
                             vertex = new WirelessNode(vertexArr[i]);
-                            numberOfWirelessNode++;
+                            numberOfWirelessNodes++;
                         } else {
                             vertex = new Node(vertexArr[i]);
                             numberOfAPs++;
@@ -133,4 +137,22 @@ public class PSTKMGraph extends Graph {
             edgeNum--;
         }
     }
+
+    public void setNumberOfNodes(int numberOfWirelessNode, int numberOfAP){
+        numberOfWirelessNodes=numberOfWirelessNode;
+        numberOfAPs=numberOfAP;
+    }
+
+    public void setNumberOfW(int numberOfWirelessNode){
+        numberOfWirelessNodes=numberOfWirelessNode;
+    }
+
+    public int getNumberAP(){
+        return numberOfAPs;
+    }
+
+    public int getNumberW(){
+        return numberOfWirelessNodes;
+    }
+
 }

@@ -29,7 +29,7 @@ public class ProblemSolver {
     //chyba jednak nie potrzebna ta funkcja bo wybeiram kolejna w simulatedannealing
     private void changeConfiguration(int i){
         List<String> configurationIds = new ArrayList<>(inputData.getConfigurations().keySet());
-        int numberAPs = inputData.getGraph().getNumberAP();
+        //int numberAPs = inputData.getGraph().getNumberAP();
 
 
     }

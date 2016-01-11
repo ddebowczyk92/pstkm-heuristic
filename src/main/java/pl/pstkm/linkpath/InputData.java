@@ -14,7 +14,7 @@ import java.util.HashMap;
  */
 public class InputData {
 
-    private Graph graph;
+    private PSTKMGraph graph;
     private HashMap<String, Demand> demands;
     private HashMap<String, Configuration> configurations;
 
@@ -35,8 +35,7 @@ public class InputData {
             BufferedReader bufRead = new BufferedReader(input);
 
             boolean isFirstLine = true;
-            boolean isSecondLine = true;
-            boolean isThirdLine = true;
+            int numberOfAP =0;
             int j = 0;
             demands = new HashMap<String, Demand>();
 
@@ -60,7 +59,6 @@ public class InputData {
                     graph = new PSTKMGraph(sciezka);
 
                 } else if (j == 1) {
-                    isSecondLine = false;
                     String[] configurationArr = line2.trim().split("\\s");
                     configurations = new HashMap<String, Configuration>();
 
@@ -82,16 +80,21 @@ public class InputData {
 
 
                 } else if (j == 3) {
+                    String temporary=null;
                     String[] strList2 = line2.trim().split("\\s");
                     String configurationId = strList2[0];
                     String apNodeId = strList2[1];
                     Configuration configuration = configurations.get(configurationId);
                     Vertex node = (Vertex) graph.getVertex(apNodeId);
                     node.addConfiguration(configuration);
+                    if(temporary==apNodeId){
+                        numberOfAP++;
+                    }
+                    temporary=apNodeId;
 
 
                 } else if (j == 4) {
-
+                    graph.setNumberOfW(numberOfAP);
                     String[] strList3 = line2.trim().split("\\s");
                     String configurationId = strList3[0];
                     String wNodeId = strList3[1];
@@ -115,7 +118,7 @@ public class InputData {
         return graph;
     }
 
-    public void setGraph(Graph graph) {
+    public void setGraph(PSTKMGraph graph) {
         this.graph = graph;
     }
 
