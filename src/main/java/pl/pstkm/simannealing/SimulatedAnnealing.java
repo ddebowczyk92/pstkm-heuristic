@@ -19,8 +19,11 @@ public class SimulatedAnnealing {
      * interfejsie AnnealingFunction.java (można go rozszerzyć o potrzebne elementy lub zastąpić klasą abstrakcyjną)
      */
 
+    //te funkcje pewnie trzeba przeniesc w inne meisjce ale to juz sam to lepiej rozplanujesz
+
     private Graph graph;
     private int numberOfWirelessNodes;
+    private int numberOfAPs;
     private List<BaseVertex> vertexList;
     private List<Set<Configuration>> possibleConfigurationSets;
 
@@ -30,6 +33,7 @@ public class SimulatedAnnealing {
         vertexList = graph.getVertexList();
         numberOfWirelessNodes = numberOfWirelessNodes();
         this.possibleConfigurationSets = possibleConfigurationSets;
+        numberOfAPs=graph.getNumberAP();
     }
 
     private int numberOfWirelessNodes(){
@@ -43,29 +47,27 @@ public class SimulatedAnnealing {
         return j;
     }
 
-    public Set<Configuration> simulatedAnnealing(){
+    //wybieranie kolejnych zestawow funkcji
+    public Set<Configuration> simulatedAnnealing(int random){
         Set<Configuration> configurations = null;
         int FunkcjaCelu = 0;
-        for(int i = 0; possibleConfigurationSets.size() < i; i++){
-            if(mainFunction(i) >= FunkcjaCelu){
-                FunkcjaCelu = mainFunction(i);
-                configurations = possibleConfigurationSets.get(i);
-            }
-
+        for(int i = random; possibleConfigurationSets.size() < i; i++ ) {
+                if (mainFunction(i) >= FunkcjaCelu) {
+                    FunkcjaCelu = mainFunction(i);
+                    configurations = possibleConfigurationSets.get(i);
+                }
         }
         return configurations;
     }
 
 
-    //zmiana set na list by moc wyciagac
-    //dodanie do configuration wycagania liczby W
+    //funkcja celu
     private int mainFunction(int i){
         int numberOfConnections = 0;
         int mean = 0;
         Set<Configuration> configurations = possibleConfigurationSets.get(i);
-        for(int j =0; configurations.size() < j; j++){
-            Configuration configuration = configurations.get(j);
-            numberOfConnections = numberOfConnections + configuration.getNumber();
+        for(Configuration conf : configurations){
+            numberOfConnections = numberOfConnections + conf.getNumber();
         }
         mean = numberOfConnections/numberOfWirelessNodes;
         return mean;

@@ -26,6 +26,14 @@ public class ProblemSolver {
         generateConfigurationSets();
     }
 
+    //chyba jednak nie potrzebna ta funkcja bo wybeiram kolejna w simulatedannealing
+    private void changeConfiguration(int i){
+        List<String> configurationIds = new ArrayList<>(inputData.getConfigurations().keySet());
+        int numberAPs = inputData.getGraph().getNumberAP();
+
+
+    }
+
     private void generateConfigurationSets() {
         possibleConfigurationSets = new ArrayList();
         List<String> configurationIds = new ArrayList<>(inputData.getConfigurations().keySet());

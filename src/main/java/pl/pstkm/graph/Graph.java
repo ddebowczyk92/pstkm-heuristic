@@ -31,6 +31,10 @@ public class Graph implements BaseGraph {
 
     protected int edgeNum = 0;
 
+    protected int numberOfWirelessNodes = 0;
+
+    protected int numberOfAPs = 0;
+
     public Graph(final String dataFileName) {
         importFromFile(dataFileName);
     }
@@ -168,6 +172,19 @@ public class Graph implements BaseGraph {
 
     public BaseVertex getVertex(String id) {
         return idVertexIndex.get(id);
+    }
+
+    public void setNumberOfNodes(int numberOfWirelessNode, int numberOfAP){
+        numberOfWirelessNodes=numberOfWirelessNode;
+        numberOfAPs=numberOfAP;
+    }
+
+    public int getNumberAP(){
+        return numberOfAPs;
+    }
+
+    public int getNumberW(){
+        return numberOfWirelessNodes;
     }
 
 }

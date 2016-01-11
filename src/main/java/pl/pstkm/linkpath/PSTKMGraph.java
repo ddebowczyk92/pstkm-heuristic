@@ -60,14 +60,21 @@ public class PSTKMGraph extends Graph {
                     String[] vertexArr = line.trim().split("\\s");
 
                     for (int i = 0; i < vertexArr.length; i++) {
+                        int numberOfWirelessNode=0;
+                        int numberOfAPs=0;
                         BaseVertex vertex = null;
                         if (vertexArr[i].charAt(0) == 'W') {
                             vertex = new WirelessNode(vertexArr[i]);
-                        } else vertex = new Node(vertexArr[i]);
+                            numberOfWirelessNode++;
+                        } else {
+                            vertex = new Node(vertexArr[i]);
+                            numberOfAPs++;
+                        }
                         vertexList.add(vertex);
                         idVertexIndex.put(vertex.getId(), vertex);
                         vertexNum += 1;
                     }
+
                 } else {
                     //2.2.2 find a new edge and put it in the graph
                     String[] strList = line.trim().split("\\s");
