@@ -1,33 +1,30 @@
 package pl.pstkm.linkpath;
 
+import com.google.common.collect.HashBiMap;
 import pl.pstkm.graph.Graph;
 import pl.pstkm.graph.Path;
 import pl.pstkm.graph.abstraction.BaseVertex;
 import pl.pstkm.graph.algorithm.DijkstraShortestPath;
 import pl.pstkm.graph.algorithm.YenTopKShortestPaths;
 import pl.pstkm.graph.utils.Pair;
-import pl.pstkm.simannealing.AnnealingFunction;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by DominikD on 2016-01-10.
  */
-public class PathProblem implements AnnealingFunction {
+public class PathProblem {
 
-    /**
-     * TODO poskładać to do kupy!!! zaimplementować getResult
-     */
+
+    private final int numberOfBestPaths = 10;
+
     private final Graph graph;
 
-    private final Set<Demand> demands;
+    private final List<Demand> demands;
 
     private ArrayList<Path> chosenPaths;
 
-    public PathProblem(Graph graph, Set<Demand> demands) {
+    public PathProblem(Graph graph, List<Demand> demands) {
         this.graph = graph;
         this.demands = demands;
     }
@@ -43,123 +40,85 @@ public class PathProblem implements AnnealingFunction {
         return true;
     }
 
-    private boolean checkEdgeLoadForDemand(List<Path> paths, Demand demand) {
-        HashMap<Pair<String, String>, Double> edgeLoad = new HashMap<>();
-        for (Path path : paths) {
-            List<BaseVertex> vertexList = path.getVertexList();
-            for (int i = 0; i < vertexList.size() - 1; i++) {
-                BaseVertex begin = vertexList.get(i);
-                BaseVertex end = vertexList.get(i + 1);
-                Pair<String, String> pair = new Pair(begin.getId(), end.getId());
-                if (edgeLoad.containsKey(pair)) {
-                    Double load = edgeLoad.get(pair);
-                    load += graph.getEdgeWeight(begin, end);
-                    edgeLoad.put(pair, load);
-
-                } else {
-                    edgeLoad.put(pair, graph.getEdgeWeight(begin, end));
-                }
-            }
-        }
-
-        for (Double load : edgeLoad.values()) {
-            if (load > demand.getCost()) {
-                return false;
-            }
-        }
-        return true;
-    }
-    //funkcja sprawdzajaca czy dany zestaw sciezek dal danych demandow jest spelniony
-
-    private boolean checkEdgeLoadForDemands(List<Path> paths, Set<Demand> demands) {
-        HashMap<Pair<String, String>, Double> edgeLoad = new HashMap<>();
-        double costOfDemands = 0;
-        for (Path path : paths) {
-            List<BaseVertex> vertexList = path.getVertexList();
-            for (int i = 0; i < vertexList.size() - 1; i++) {
-                BaseVertex begin = vertexList.get(i);
-                BaseVertex end = vertexList.get(i + 1);
-                Pair<String, String> pair = new Pair(begin.getId(), end.getId());
-                if (edgeLoad.containsKey(pair)) {
-                    Double load = edgeLoad.get(pair);
-                    load += graph.getEdgeWeight(begin, end);
-                    edgeLoad.put(pair, load);
-
-                } else {
-                    edgeLoad.put(pair, graph.getEdgeWeight(begin, end));
-                }
-            }
-        }
-
-        for(Demand dem : demands){
-            costOfDemands = costOfDemands + dem.getCost();
-        }
-
-        for (Double load : edgeLoad.values()) {
-            if (load > costOfDemands) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-
-    @Override
-    public double  getResult(){return 0;}
-
-    //funkcja zwracajaca zestaw powiedzmy najlepszych sciezek spelniajacych demandy
-    //glownie korzysta z nowej funkcji checkEdgeLoadForDemands(List<Path> paths, Set<Demand> demands)
-    //sprawdzajacej czy zestaw demandow dla wyboru danych sciezek moze byc spelniony
-
-
-    public List<Path> getResult(Set<Demand> demands) {
-        int w=0;
-        Path[][] listsOfPaths;
-        Path[] temporaryPath;
-        //List<Path> chosenPaths;
-        temporaryPath =new  Path[demands.size()];
-        listsOfPaths = new Path[demands.size()][20];
-        List<Path> chosenPaths = new ArrayList<Path>();
-        //tworzenie 20 sciezek dla kazdego demandu
+    public Set<Path> getResult() {
+        HashBiMap<Demand, List<Path>> demandCandidates = HashBiMap.create(demands.size());
+        HashBiMap<Demand, Path> temporaryBestPaths = HashBiMap.create(demands.size());
         for (Demand demand : demands) {
-            YenTopKShortestPaths yenTopKShortestPaths  = new YenTopKShortestPaths(graph);
-            List<Path> PathsForDemand = yenTopKShortestPaths.getShortestPaths(demand.getSourceNode(), demand.getSinkNode(), 20);
-            for(int z = 0; z< PathsForDemand.size(); z++){
-                listsOfPaths[w][z]=PathsForDemand.get(z);
-            }
-            w++;
+            List<Path> shortestPaths = getShortestPaths(demand);
+            demandCandidates.put(demand, shortestPaths);
+            temporaryBestPaths.put(demand, shortestPaths.get(0));
         }
-        //podstawowy zestaw najlepszych sciezek
-        for(int i2 =0; demands.size() > i2; i2++){
-            temporaryPath[i2]=listsOfPaths[i2][0];
-            chosenPaths.add(listsOfPaths[i2][0]);
-            //chosenPaths.add(temporaryPath[i2]);
-        }
-        if(checkEdgeLoadForDemands(chosenPaths, demands)){
-            return chosenPaths;
-        }else {
-            //wybieranie innych sciezek gdy podatwowe nie sa spelnione
-            //petle po prostu powoduja,ze wybeiramy inne zestawy
-            //tabice dlatgeo by mozna bylo sie latwo przemieszczac po tym
-            chosenPaths.clear();
-            for(int k=0; 19 > k; k++) {
-                for (int i = 0; demands.size() > i; i++) {
-                    for (int j = 0; 19 > j - k; j++) {
-                        temporaryPath[i]=listsOfPaths[i][j+k];
-                        for (int i3 = 0; demands.size() > i3; i3++) {
-                            chosenPaths.add(temporaryPath[i3]);
-                        }
-                        if(checkEdgeLoadForDemands(chosenPaths, demands)){
-                            return chosenPaths;
-                        }
-                        chosenPaths.clear();
+        if (checkEdgeCapacityForDemands(temporaryBestPaths.inverse())) {
+            return temporaryBestPaths.inverse().keySet();
+        } else {
+            for (int k = 0; k < numberOfBestPaths - 1; k++)
+                for (int i = 0; i < demands.size(); i++) {
+                    List<Path> paths = demandCandidates.get(demands.get(i));
+                    if (k > paths.size()) {
+                        continue;
                     }
+                    for (int j = 0; j < paths.size(); j++) {
+                        temporaryBestPaths.put(demands.get(i), paths.get(j));
+                        if (checkEdgeCapacityForDemands(temporaryBestPaths.inverse())) {
+                            return temporaryBestPaths.inverse().keySet();
+                        }
+                        if (j == paths.size() - 1) {
+                            temporaryBestPaths.put(demands.get(i), paths.get(k));
+                        }
+                    }
+                }
+        }
+        if (checkEdgeCapacityForDemands(temporaryBestPaths.inverse())) return temporaryBestPaths.inverse().keySet();
+        else {
+            return new HashSet<>();
+        }
+    }
 
+    private List<Path> getShortestPaths(Demand demand) {
+        List<Path> pathsRealizingDemand = new ArrayList<>();
+        YenTopKShortestPaths yen = new YenTopKShortestPaths(this.graph);
+        List<Path> paths = yen.getShortestPaths(demand.getSourceNode(), demand.getSinkNode(), numberOfBestPaths);
+        for (Path path : paths) {
+            if (checkIfPathCanHandleDemand(path, demand)) {
+                pathsRealizingDemand.add(path);
+            }
+        }
+        return pathsRealizingDemand;
+    }
+
+    private boolean checkIfPathCanHandleDemand(Path path, Demand demand) {
+        List<BaseVertex> vertexList = path.getVertexList();
+        for (int i = 0; i < vertexList.size() - 1; i++) {
+            BaseVertex begin = vertexList.get(i);
+            BaseVertex end = vertexList.get(i + 1);
+            if (graph.getEdgeWeight(begin, end) < demand.getCost()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean checkEdgeCapacityForDemands(Map<Path, Demand> demandsPaths) {
+        HashMap<Pair<String, String>, Double> edgeLoad = new HashMap<>();
+        for (Path path : demandsPaths.keySet()) {
+            List<BaseVertex> vertexList = path.getVertexList();
+            for (int i = 0; i < vertexList.size() - 1; i++) {
+                BaseVertex begin = vertexList.get(i);
+                BaseVertex end = vertexList.get(i + 1);
+                Pair<String, String> pair = new Pair(begin.getId(), end.getId());
+                Demand demand = demandsPaths.get(path);
+                if (edgeLoad.containsKey(pair)) {
+                    Double load = demand.getCost() + edgeLoad.get(pair);
+                    if (load > graph.getEdgeWeight(begin, end)) {
+                        return false;
+                    } else {
+                        edgeLoad.put(pair, load);
+                    }
+                } else {
+                    edgeLoad.put(pair, demand.getCost());
                 }
             }
         }
-
-
-        return chosenPaths;
+        return true;
     }
 }

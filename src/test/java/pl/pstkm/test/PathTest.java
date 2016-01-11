@@ -7,7 +7,7 @@ import pl.pstkm.linkpath.Demand;
 import pl.pstkm.linkpath.InputData;
 import pl.pstkm.linkpath.PathProblem;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -21,9 +21,11 @@ public class PathTest {
     @Test
     public void test1() {
         InputData input = new InputData("data/problem_variables");
-        Set<Demand> demands = new HashSet<>(input.getDemands().values());
+        List<Demand> demands = new ArrayList<>(input.getDemands().values());
         PathProblem problem = new PathProblem(input.getGraph(),demands );
-        List<Path> lista = problem.getResult(demands);
-        System.out.format("");
+        Set<Path> pathResult= problem.getResult();
+        for(Path path : pathResult) {
+            log.debug(path.toString());
+        }
     }
 }

@@ -52,4 +52,9 @@ public class Demand {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
+
+    @Override
+    public String toString() {
+        return sourceNode.getId() + " -> " + sinkNode.getId() + ": " + cost;
+    }
 }
