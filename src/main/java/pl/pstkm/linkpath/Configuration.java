@@ -9,8 +9,10 @@ public class Configuration {
 
     private final String id;
 
+    private int numberOfWirelessnodes;
+
     public Configuration(String id) {
-        this.id = id;
+        this.id = id; this.numberOfWirelessnodes=0;
     }
 
     public String getId() {
@@ -33,4 +35,12 @@ public class Configuration {
     public int hashCode() {
         return id.hashCode();
     }
+
+    public void setConfigurationNumber(int i){
+        this.numberOfWirelessnodes=i;
+    }
+
+    public int getNumber(){
+        return this.numberOfWirelessnodes;
+    };
 }

@@ -18,7 +18,7 @@ public class ProblemSolver {
     /**
      * wszytskie możliwe zestawy konfiguracji
      */
-    private Set<Set<Configuration>> possibleConfigurationSets;
+    private List<Set<Configuration>> possibleConfigurationSets;
 
 
     public ProblemSolver(InputData inputData) {
@@ -27,7 +27,7 @@ public class ProblemSolver {
     }
 
     private void generateConfigurationSets() {
-        possibleConfigurationSets = new HashSet<>();
+        possibleConfigurationSets = new ArrayList();
         List<String> configurationIds = new ArrayList<>(inputData.getConfigurations().keySet());
         for (String confId : configurationIds) {
 
