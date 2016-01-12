@@ -12,7 +12,8 @@ public class Configuration {
     private int numberOfWirelessnodes;
 
     public Configuration(String id) {
-        this.id = id; this.numberOfWirelessnodes=0;
+        this.id = id;
+        this.numberOfWirelessnodes = 0;
     }
 
     public String getId() {
@@ -36,11 +37,11 @@ public class Configuration {
         return id.hashCode();
     }
 
-    public void setConfigurationNumber(int i){
-        this.numberOfWirelessnodes=i;
+    public void setConfigurationNumber(int i) {
+        this.numberOfWirelessnodes = i;
     }
 
-    public int getNumber(){
+    public int getNumberOfWirelessnodes() {
         return this.numberOfWirelessnodes;
-    };
+    }
 }

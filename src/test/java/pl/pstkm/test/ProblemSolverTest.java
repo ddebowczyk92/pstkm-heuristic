@@ -14,8 +14,8 @@ public class ProblemSolverTest {
     @Test
     public void test1(){
         InputData inputData = new InputData("data/problem_variables");
-        ProblemSolver problemSolution = new ProblemSolver(inputData);
-
+        ProblemSolver problemSolver = new ProblemSolver(inputData);
+        problemSolver.solve();
     }
 
 }

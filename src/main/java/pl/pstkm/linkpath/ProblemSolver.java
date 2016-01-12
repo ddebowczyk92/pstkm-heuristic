@@ -1,5 +1,7 @@
 package pl.pstkm.linkpath;
 
+import pl.pstkm.simannealing.SimulatedAnnealing;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -26,12 +28,9 @@ public class ProblemSolver {
         generateConfigurationSets();
     }
 
-    //chyba jednak nie potrzebna ta funkcja bo wybeiram kolejna w simulatedannealing
-    private void changeConfiguration(int i){
-        List<String> configurationIds = new ArrayList<>(inputData.getConfigurations().keySet());
-        //int numberAPs = inputData.getGraph().getNumberAP();
-
-
+    public Set<Configuration> solve() {
+        SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(new PSTKMGraph(inputData.getGraph()), possibleConfigurationSets, new HashSet<>(inputData.getDemands().values()), 10000.0, 0.00001, 0.9999);
+        return simulatedAnnealing.findSolution();
     }
 
     private void generateConfigurationSets() {

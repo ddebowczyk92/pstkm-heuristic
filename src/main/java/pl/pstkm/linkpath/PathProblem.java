@@ -29,7 +29,12 @@ public class PathProblem {
         this.demands = demands;
     }
 
-    public boolean checkIfNetworkRealizesDemands() {
+    public boolean getResult() {
+        Set<Path> paths = getResultPaths();
+        return checkIfNetworkRealizesDemands() && !paths.isEmpty();
+    }
+
+    private boolean checkIfNetworkRealizesDemands() {
         for (Demand demand : demands) {
             DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graph);
             Path shortestPath = dijkstraShortestPath.getShortestPath(demand.getSourceNode(), demand.getSinkNode());
@@ -40,7 +45,7 @@ public class PathProblem {
         return true;
     }
 
-    public Set<Path> getResult() {
+    private Set<Path> getResultPaths() {
         HashBiMap<Demand, List<Path>> demandCandidates = HashBiMap.create(demands.size());
         HashBiMap<Demand, Path> temporaryBestPaths = HashBiMap.create(demands.size());
         for (Demand demand : demands) {
@@ -51,7 +56,7 @@ public class PathProblem {
         if (checkEdgeCapacityForDemands(temporaryBestPaths.inverse())) {
             return temporaryBestPaths.inverse().keySet();
         } else {
-            for (int k = 0; k < numberOfBestPaths - 1; k++)
+            for (int k = 0; k < 3 - 1; k++) {
                 for (int i = 0; i < demands.size(); i++) {
                     List<Path> paths = demandCandidates.get(demands.get(i));
                     if (k > paths.size()) {
@@ -67,6 +72,7 @@ public class PathProblem {
                         }
                     }
                 }
+            }
         }
         if (checkEdgeCapacityForDemands(temporaryBestPaths.inverse())) return temporaryBestPaths.inverse().keySet();
         else {
