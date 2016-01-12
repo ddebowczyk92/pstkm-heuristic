@@ -5,6 +5,7 @@ package pl.pstkm.simannealing;
  */
 
 import pl.pstkm.exception.InvalidInputDataException;
+import pl.pstkm.graph.Path;
 import pl.pstkm.graph.abstraction.BaseVertex;
 import pl.pstkm.graph.utils.Pair;
 import pl.pstkm.linkpath.Configuration;
@@ -101,6 +102,7 @@ public class SimulatedAnnealing {
         if (reduced.isEmpty()) {
             throw new InvalidInputDataException();
         }
+
         possibleConfigurationSets = reduced;
     }
 

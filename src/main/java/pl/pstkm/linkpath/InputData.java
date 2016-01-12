@@ -17,6 +17,8 @@ public class InputData {
     private PSTKMGraph graph;
     private HashMap<String, Demand> demands;
     private HashMap<String, Configuration> configurations;
+    private HashMap<String, Integer> configurationInWirelessNodes = new HashMap<>();
+
 
     public InputData() {
     }
@@ -100,6 +102,7 @@ public class InputData {
                     String configurationId = strList3[0];
                     String wNodeId = strList3[1];
                     Configuration configuration = configurations.get(configurationId);
+                    configuration.setConfigurationNumberPlusOne(1);
                     Vertex node = (Vertex) graph.getVertex(wNodeId);
                     node.addConfiguration(configuration);
 

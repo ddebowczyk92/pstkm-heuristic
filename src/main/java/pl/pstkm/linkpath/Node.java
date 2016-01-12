@@ -24,6 +24,7 @@ public class Node extends Vertex {
                 break;
             }
         }
+
     }
 
     public Set<Configuration> getPossibleConfigurations() {

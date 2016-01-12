@@ -21,7 +21,7 @@ public class PathProblem {
 
     private final List<Demand> demands;
 
-    private ArrayList<Path> chosenPaths;
+    private List<Path> chosenPaths = new ArrayList<>();
 
     public PathProblem(Graph graph, List<Demand> demands) {
         this.graph = graph;
@@ -29,8 +29,8 @@ public class PathProblem {
     }
 
     public boolean getResult() {
-        Set<Path> paths = getResultPaths();
-        return checkIfNetworkRealizesDemands() && !paths.isEmpty();
+        getResultPaths();
+        return checkIfNetworkRealizesDemands() && !chosenPaths.isEmpty();
     }
 
     private boolean checkIfNetworkRealizesDemands() {
@@ -44,7 +44,7 @@ public class PathProblem {
         return true;
     }
 
-    private Set<Path> getResultPaths() {
+    private List<Path> getResultPaths() {
         int kConstant = numberOfBestPaths;
         HashBiMap<Demand, List<Path>> demandCandidates = HashBiMap.create(demands.size());
         HashBiMap<Demand, Path> temporaryBestPaths = HashBiMap.create(demands.size());
@@ -52,12 +52,13 @@ public class PathProblem {
             List<Path> shortestPaths = getShortestPaths(demand);
             demandCandidates.put(demand, shortestPaths);
             if(shortestPaths.size()==0){
-                return new HashSet<>();
+                return new ArrayList<>();
             }
             temporaryBestPaths.put(demand, shortestPaths.get(0));
         }
         if (checkEdgeCapacityForDemands(temporaryBestPaths.inverse())) {
-            return temporaryBestPaths.inverse().keySet();
+            chosenPaths.addAll(temporaryBestPaths.inverse().keySet());
+            return chosenPaths;
         } else {
             for (int k = 0; k < kConstant - 1; k++) {
                 for (int i = 0; i < demands.size(); i++) {
@@ -68,7 +69,8 @@ public class PathProblem {
                     for (int j = k; j < paths.size(); j++) {
                         temporaryBestPaths.put(demands.get(i), paths.get(j));
                         if (checkEdgeCapacityForDemands(temporaryBestPaths.inverse())) {
-                            return temporaryBestPaths.inverse().keySet();
+                            chosenPaths.addAll(temporaryBestPaths.inverse().keySet());
+                            return chosenPaths;
                         }
                         if (j == paths.size() - 1) {
                             temporaryBestPaths.put(demands.get(i), paths.get(k));
@@ -77,9 +79,12 @@ public class PathProblem {
                 }
             }
         }
-        if (checkEdgeCapacityForDemands(temporaryBestPaths.inverse())) return temporaryBestPaths.inverse().keySet();
+        if (checkEdgeCapacityForDemands(temporaryBestPaths.inverse())){
+            chosenPaths.addAll(temporaryBestPaths.inverse().keySet());
+            return chosenPaths;
+        }
         else {
-            return new HashSet<>();
+            return new ArrayList<>();
         }
     }
 
@@ -130,4 +135,9 @@ public class PathProblem {
         }
         return true;
     }
+
+    public List<Path> getChosenPaths() {
+        return chosenPaths;
+    }
+
 }

@@ -37,8 +37,8 @@ public class Configuration {
         return id.hashCode();
     }
 
-    public void setConfigurationNumber(int i) {
-        this.numberOfWirelessnodes = i;
+    public void setConfigurationNumberPlusOne(int i) {
+        this.numberOfWirelessnodes = this.numberOfWirelessnodes + i;
     }
 
     public int getNumberOfWirelessnodes() {
