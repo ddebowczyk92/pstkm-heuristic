@@ -34,23 +34,29 @@ public class ProblemSolver {
     }
 
     private void generateConfigurationSets() {
-        possibleConfigurationSets = new ArrayList();
+        //possibleConfigurationSets = new ArrayList();
+        Set<Set<Configuration>> possibleConfigurationSets2 = new HashSet<>();
         List<String> configurationIds = new ArrayList<>(inputData.getConfigurations().keySet());
-        for (String confId : configurationIds) {
+        for (String confId2 : configurationIds) {
+            for (String confId : configurationIds) {
 
-            Set<Configuration> firstConfigurationSet = new HashSet<>();
-            firstConfigurationSet.add(inputData.getConfigurations().get(confId));
-            possibleConfigurationSets.add(firstConfigurationSet);
-            for (int i = 0; i < configurationIds.size(); i++) {
-                Set<Configuration> configurationSet = new HashSet<>();
-                configurationSet.addAll(getConfigurationSubset(i, configurationIds, confId));
-                if (!configurationSet.isEmpty()) {
-                    possibleConfigurationSets.add(configurationSet);
+                Set<Configuration> firstConfigurationSet = new HashSet<>();
+                firstConfigurationSet.add(inputData.getConfigurations().get(confId));
+                possibleConfigurationSets2.add(firstConfigurationSet);
+
+                for (int i = 0; i < configurationIds.size(); i++) {
+                    Set<Configuration> configurationSet = new HashSet<>();
+                    configurationSet.add(inputData.getConfigurations().get(confId2));
+                    configurationSet.addAll(getConfigurationSubset(i, configurationIds, confId));
+                    if (!configurationSet.isEmpty()) {
+                        possibleConfigurationSets2.add(configurationSet);
+                    }
+
                 }
 
             }
-
         }
+        possibleConfigurationSets = new ArrayList<>(possibleConfigurationSets2);
     }
 
     private Set<Configuration> getConfigurationSubset(int endIndex, List<String> configurationIds, String exceptId) {

@@ -91,10 +91,11 @@ public class InputData {
                         numberOfAP++;
                     }
                     temporary=apNodeId;
+                    graph.setNumberOfAPs(numberOfAP);
 
 
                 } else if (j == 4) {
-                    graph.setNumberOfW(numberOfAP);
+
                     String[] strList3 = line2.trim().split("\\s");
                     String configurationId = strList3[0];
                     String wNodeId = strList3[1];

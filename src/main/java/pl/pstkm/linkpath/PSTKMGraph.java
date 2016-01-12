@@ -147,6 +147,10 @@ public class PSTKMGraph extends Graph {
         numberOfWirelessNodes=numberOfWirelessNode;
     }
 
+    public void setNumberOfAPs(int numberOfAPs){
+        numberOfAPs=numberOfAPs;
+    }
+
     public int getNumberAP(){
         return numberOfAPs;
     }

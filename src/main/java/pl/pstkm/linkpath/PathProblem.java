@@ -46,23 +46,27 @@ public class PathProblem {
     }
 
     private Set<Path> getResultPaths() {
+        int kConstant = numberOfBestPaths;
         HashBiMap<Demand, List<Path>> demandCandidates = HashBiMap.create(demands.size());
         HashBiMap<Demand, Path> temporaryBestPaths = HashBiMap.create(demands.size());
         for (Demand demand : demands) {
             List<Path> shortestPaths = getShortestPaths(demand);
             demandCandidates.put(demand, shortestPaths);
+            if(shortestPaths.size()==0){
+                return new HashSet<>();
+            }
             temporaryBestPaths.put(demand, shortestPaths.get(0));
         }
         if (checkEdgeCapacityForDemands(temporaryBestPaths.inverse())) {
             return temporaryBestPaths.inverse().keySet();
         } else {
-            for (int k = 0; k < 3 - 1; k++) {
+            for (int k = 0; k < kConstant - 1; k++) {
                 for (int i = 0; i < demands.size(); i++) {
                     List<Path> paths = demandCandidates.get(demands.get(i));
-                    if (k > paths.size()) {
+                    if (k > paths.size() -1)  {
                         continue;
                     }
-                    for (int j = 0; j < paths.size(); j++) {
+                    for (int j = k; j < paths.size(); j++) {
                         temporaryBestPaths.put(demands.get(i), paths.get(j));
                         if (checkEdgeCapacityForDemands(temporaryBestPaths.inverse())) {
                             return temporaryBestPaths.inverse().keySet();
