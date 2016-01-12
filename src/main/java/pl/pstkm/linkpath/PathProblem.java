@@ -4,7 +4,6 @@ import com.google.common.collect.HashBiMap;
 import pl.pstkm.graph.Graph;
 import pl.pstkm.graph.Path;
 import pl.pstkm.graph.abstraction.BaseVertex;
-import pl.pstkm.graph.algorithm.DijkstraShortestPath;
 import pl.pstkm.graph.algorithm.YenTopKShortestPaths;
 import pl.pstkm.graph.utils.Pair;
 
@@ -36,8 +35,8 @@ public class PathProblem {
 
     private boolean checkIfNetworkRealizesDemands() {
         for (Demand demand : demands) {
-            DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graph);
-            Path shortestPath = dijkstraShortestPath.getShortestPath(demand.getSourceNode(), demand.getSinkNode());
+            YenTopKShortestPaths yen = new YenTopKShortestPaths(graph);
+            Path shortestPath = yen.getShortestPath(graph.getVertex(demand.getSourceNode().getId()), graph.getVertex(demand.getSinkNode().getId()));
             if (shortestPath.getVertexList().isEmpty()) {
                 return false;
             }

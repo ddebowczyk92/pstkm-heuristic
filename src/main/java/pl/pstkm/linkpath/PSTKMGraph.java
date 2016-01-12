@@ -13,11 +13,13 @@ import java.util.Set;
 /**
  * Created by DominikD on 2016-01-09.
  */
-public class PSTKMGraph extends Graph {
+public class PSTKMGraph extends Graph implements Cloneable {
 
     private int numberOfWirelessNodes;
 
     private int numberOfAPs;
+
+    private String fileName;
 
     public PSTKMGraph() {
         super();
@@ -25,6 +27,7 @@ public class PSTKMGraph extends Graph {
 
     public PSTKMGraph(String file) {
         super(file);
+        fileName = file;
     }
 
     public PSTKMGraph(final Graph graph) {
@@ -46,8 +49,8 @@ public class PSTKMGraph extends Graph {
             BufferedReader bufRead = new BufferedReader(input);
 
             boolean isFirstLine = true;
-            numberOfWirelessNodes=0;
-            numberOfAPs=0;
+            numberOfWirelessNodes = 0;
+            numberOfAPs = 0;
             String line;    // String that holds current file line
 
             // 2. Read first line
@@ -138,25 +141,41 @@ public class PSTKMGraph extends Graph {
         }
     }
 
-    public void setNumberOfNodes(int numberOfWirelessNode, int numberOfAP){
-        numberOfWirelessNodes=numberOfWirelessNode;
-        numberOfAPs=numberOfAP;
+    public void setNumberOfNodes(int numberOfWirelessNode, int numberOfAP) {
+        numberOfWirelessNodes = numberOfWirelessNode;
+        numberOfAPs = numberOfAP;
     }
 
-    public void setNumberOfW(int numberOfWirelessNode){
-        numberOfWirelessNodes=numberOfWirelessNode;
+    public void setNumberOfW(int numberOfWirelessNode) {
+        numberOfWirelessNodes = numberOfWirelessNode;
     }
 
-    public void setNumberOfAPs(int numberOfAPs){
-        numberOfAPs=numberOfAPs;
+    public void setNumberOfAPs(int numberOfAPs) {
+        numberOfAPs = numberOfAPs;
     }
 
-    public int getNumberAP(){
+    public int getNumberAP() {
         return numberOfAPs;
     }
 
-    public int getNumberW(){
+    public int getNumberW() {
         return numberOfWirelessNodes;
+    }
+
+    public PSTKMGraph copy() {
+        PSTKMGraph newPSTKMGraph = new PSTKMGraph(fileName);
+        for (int i = 0; i < this.getVertexList().size(); i++) {
+            BaseVertex oldVertex = vertexList.get(i);
+            if (oldVertex instanceof Node) {
+                Node node = (Node) newPSTKMGraph.getVertexList().get(i);
+                node.setPossibleConfigurations(((Node) oldVertex).getPossibleConfigurations());
+            } else if (oldVertex instanceof WirelessNode) {
+                WirelessNode node = (WirelessNode) newPSTKMGraph.getVertexList().get(i);
+                node.setConfigurations(((WirelessNode) oldVertex).getConfigurations());
+            }
+
+        }
+        return newPSTKMGraph;
     }
 
 }

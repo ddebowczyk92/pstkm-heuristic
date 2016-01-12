@@ -4,7 +4,9 @@ package pl.pstkm.simannealing;
  * Created by DominikD on 2016-01-10.
  */
 
+import pl.pstkm.exception.InvalidInputDataException;
 import pl.pstkm.graph.abstraction.BaseVertex;
+import pl.pstkm.graph.utils.Pair;
 import pl.pstkm.linkpath.Configuration;
 import pl.pstkm.linkpath.Demand;
 import pl.pstkm.linkpath.PSTKMGraph;
@@ -37,7 +39,7 @@ public class SimulatedAnnealing {
     private Random randomGenerator;
 
 
-    public SimulatedAnnealing(PSTKMGraph graph, List<Set<Configuration>> possibleConfigurationSets, Set<Demand> demands, double startTemp, double stopTemp, double coolingRate) {
+    public SimulatedAnnealing(PSTKMGraph graph, List<Set<Configuration>> possibleConfigurationSets, Set<Demand> demands, double startTemp, double stopTemp, double coolingRate) throws InvalidInputDataException {
         this.graph = graph;
         this.temperature = startTemp;
         this.stopTemp = stopTemp;
@@ -54,7 +56,7 @@ public class SimulatedAnnealing {
 
 
     //wybieranie kolejnych zestawow funkcji
-    public Set<Configuration> findSolution() {
+    public Pair<Set<Configuration>, Double> findSolution() {
         int random = randomInt();
         Set<Configuration> bestConfigurations = possibleConfigurationSets.get(random);
         double distance = objective(bestConfigurations);
@@ -71,7 +73,7 @@ public class SimulatedAnnealing {
             temperature = temperature * coolingRate;
             iteration++;
         }
-        return bestConfigurations;
+        return new Pair<>(bestConfigurations, distance);
     }
 
 
@@ -86,15 +88,18 @@ public class SimulatedAnnealing {
         return mean;
     }
 
-    private void reduceConfigurationSet() {
+    private void reduceConfigurationSet() throws InvalidInputDataException {
         List<Set<Configuration>> reduced = new ArrayList<>();
         for (Set<Configuration> set : possibleConfigurationSets) {
-            PSTKMGraph pstkmGraph = new PSTKMGraph(graph, set);
+            PSTKMGraph pstkmGraph = graph.copy();
             pstkmGraph.applyChosenConfigurations(set);
             PathProblem problem = new PathProblem(pstkmGraph, new ArrayList<>(demands));
             if (problem.getResult()) {
                 reduced.add(set);
             }
+        }
+        if (reduced.isEmpty()) {
+            throw new InvalidInputDataException();
         }
         possibleConfigurationSets = reduced;
     }
@@ -108,7 +113,7 @@ public class SimulatedAnnealing {
     }
 
     public int randomInt() {
-        int index = randomGenerator.nextInt(possibleConfigurationSets.size());
+        int index = Math.abs(randomGenerator.nextInt(possibleConfigurationSets.size()));
         return index;
     }
 
