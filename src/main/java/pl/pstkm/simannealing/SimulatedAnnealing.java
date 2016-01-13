@@ -5,18 +5,11 @@ package pl.pstkm.simannealing;
  */
 
 import pl.pstkm.exception.InvalidInputDataException;
-import pl.pstkm.graph.Path;
 import pl.pstkm.graph.abstraction.BaseVertex;
 import pl.pstkm.graph.utils.Pair;
-import pl.pstkm.linkpath.Configuration;
-import pl.pstkm.linkpath.Demand;
-import pl.pstkm.linkpath.PSTKMGraph;
-import pl.pstkm.linkpath.PathProblem;
+import pl.pstkm.linkpath.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 
 public class SimulatedAnnealing {
@@ -94,9 +87,11 @@ public class SimulatedAnnealing {
         for (Set<Configuration> set : possibleConfigurationSets) {
             PSTKMGraph pstkmGraph = graph.copy();
             pstkmGraph.applyChosenConfigurations(set);
-            PathProblem problem = new PathProblem(pstkmGraph, new ArrayList<>(demands));
-            if (problem.getResult()) {
-                reduced.add(set);
+            if (checkIfAPHasOneConfiguration(pstkmGraph, set)) {
+                PathProblem problem = new PathProblem(pstkmGraph, new ArrayList<>(demands));
+                if (problem.getResult()) {
+                    reduced.add(set);
+                }
             }
         }
         if (reduced.isEmpty()) {
@@ -104,6 +99,22 @@ public class SimulatedAnnealing {
         }
 
         possibleConfigurationSets = reduced;
+    }
+
+    private boolean checkIfAPHasOneConfiguration(PSTKMGraph graph, Set<Configuration> set) {
+        List<BaseVertex> vertices = graph.getVertexList();
+        for (BaseVertex vertex : vertices) {
+            if (vertex instanceof Node) {
+                Node node = (Node) vertex;
+                if (node.isAccessPoint()) {
+                    Set<Configuration> possibleConfigurations = new HashSet<>(node.getPossibleConfigurations());
+                    if (possibleConfigurations.retainAll(set) && possibleConfigurations.size() > 1) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     private boolean shouldAccept(double temperature, double deltaE) {

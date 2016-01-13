@@ -51,7 +51,7 @@ public class PathProblem {
         for (Demand demand : demands) {
             List<Path> shortestPaths = getShortestPaths(demand);
             demandCandidates.put(demand, shortestPaths);
-            if(shortestPaths.size()==0){
+            if (shortestPaths.size() == 0) {
                 return new ArrayList<>();
             }
             temporaryBestPaths.put(demand, shortestPaths.get(0));
@@ -63,7 +63,7 @@ public class PathProblem {
             for (int k = 0; k < kConstant - 1; k++) {
                 for (int i = 0; i < demands.size(); i++) {
                     List<Path> paths = demandCandidates.get(demands.get(i));
-                    if (k > paths.size() -1)  {
+                    if (k > paths.size() - 1) {
                         continue;
                     }
                     for (int j = k; j < paths.size(); j++) {
@@ -79,11 +79,10 @@ public class PathProblem {
                 }
             }
         }
-        if (checkEdgeCapacityForDemands(temporaryBestPaths.inverse())){
+        if (checkEdgeCapacityForDemands(temporaryBestPaths.inverse())) {
             chosenPaths.addAll(temporaryBestPaths.inverse().keySet());
             return chosenPaths;
-        }
-        else {
+        } else {
             return new ArrayList<>();
         }
     }
