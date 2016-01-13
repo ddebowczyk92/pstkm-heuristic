@@ -4,6 +4,7 @@ package pl.pstkm.simannealing;
  * Created by DominikD on 2016-01-10.
  */
 
+import org.apache.log4j.Logger;
 import pl.pstkm.exception.InvalidInputDataException;
 import pl.pstkm.graph.abstraction.BaseVertex;
 import pl.pstkm.graph.utils.Pair;
@@ -13,17 +14,11 @@ import java.util.*;
 
 
 public class SimulatedAnnealing {
-    /**
-     * TODO implementacja symulowanego wyrzażania oparta na
-     * interfejsie AnnealingFunction.java (można go rozszerzyć o potrzebne elementy lub zastąpić klasą abstrakcyjną)
-     */
 
-    //te funkcje pewnie trzeba przeniesc w inne meisjce ale to juz sam to lepiej rozplanujesz
+    private static final Logger log = Logger.getLogger(SimulatedAnnealing.class);
 
     private PSTKMGraph graph;
     private int numberOfWirelessNodes;
-    private int numberOfAPs;
-    private List<BaseVertex> vertexList;
     private List<Set<Configuration>> possibleConfigurationSets;
     private Set<Demand> demands;
     private double temperature;
@@ -38,18 +33,13 @@ public class SimulatedAnnealing {
         this.temperature = startTemp;
         this.stopTemp = stopTemp;
         this.coolingRate = coolingRate;
-        vertexList = graph.getVertexList();
-        numberOfWirelessNodes = graph.getNumberW();
+        this.numberOfWirelessNodes = graph.getNumberW();
         this.possibleConfigurationSets = possibleConfigurationSets;
-        numberOfAPs = graph.getNumberAP();
         this.demands = demands;
-        randomGenerator = new Random();
+        this.randomGenerator = new Random();
         reduceConfigurationSet();
-
     }
 
-
-    //wybieranie kolejnych zestawow funkcji
     public Pair<Set<Configuration>, Double> findSolution() {
         int random = randomInt();
         Set<Configuration> bestConfigurations = possibleConfigurationSets.get(random);
@@ -66,12 +56,13 @@ public class SimulatedAnnealing {
             }
             temperature = temperature * coolingRate;
             iteration++;
+
         }
+        log.debug("Number of iterations: " + iteration);
         return new Pair<>(bestConfigurations, distance);
     }
 
 
-    //funkcja celu
     private double objective(Set<Configuration> configurations) {
         int numberOfConnections = 0;
         double mean = 0;
@@ -117,18 +108,8 @@ public class SimulatedAnnealing {
         return true;
     }
 
-    private boolean shouldAccept(double temperature, double deltaE) {
-        return (deltaE > 0.0) || (new Random().nextDouble() <= probabilityOfAcceptance(temperature, deltaE));
-    }
-
-    private double probabilityOfAcceptance(double temperature, double deltaE) {
-        return Math.exp(deltaE / temperature);
-    }
-
-    public int randomInt() {
+    private int randomInt() {
         int index = Math.abs(randomGenerator.nextInt(possibleConfigurationSets.size()));
         return index;
     }
-
-
 }

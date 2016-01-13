@@ -57,8 +57,8 @@ public class InputData {
                 if (isFirstLine) {
                     //2.2.1 obtain the number of nodes in the graph
                     isFirstLine = false;
-                    String sciezka = line2.trim();
-                    graph = new PSTKMGraph(sciezka);
+                    String path = line2.trim();
+                    graph = new PSTKMGraph(path);
 
                 } else if (j == 1) {
                     String[] configurationArr = line2.trim().split("\\s");
